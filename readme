@@ -1,0 +1,14 @@
+hyena(鬣狗) 是一个基于netty的rpc服务框架。采用redis的协议。 可以和redis客户端完美兼容
+达到跨平台的目的。
+1、
+服务端 只需实现service接口 或者 继承AbstractService实现简单Pojo封装的调用
+调用set 方法进行修改操作
+调用get 方法进行查询工作
+2、
+服务启动需要先加载ServiceFactory。 采用SPI形式加载
+默认有 JSONServiceFactory 和SpringServiceFactory 两种实现
+3、
+还可以自定义filter 在服务之前或者之后调用
+4、
+可以自定义Daemon 在服务启动和关闭时调用一些服务
+

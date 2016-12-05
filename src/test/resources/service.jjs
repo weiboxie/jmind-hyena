@@ -1,0 +1,14 @@
+{
+
+	services: {
+		sample: "jmind.hyena.example.service.SampleService",
+        mypojo:"jmind.hyena.example.service.MyPojoService"
+
+
+	},
+
+	filters: {
+		"*":["jmind.hyena.example.service.SampleFilter"],
+		"sample2":["jmind.hyena.example.service.SampleFilter"]
+	}
+}
