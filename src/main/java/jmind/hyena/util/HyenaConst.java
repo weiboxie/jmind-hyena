@@ -3,12 +3,14 @@ package jmind.hyena.util;
 import jmind.hyena.frame.HyenaMsg;
 
 /**
+ * 常量定义，大写不可变，小写可变
  * Created by xieweibo on 2016/11/25.
  */
 public abstract class HyenaConst {
 
     // 是否启动多线程
     public static boolean multithreading=false ;
+    public static String server_hosts ="127.0.0.1:9527" ;
 
     public static  final String UTF8="UTF-8" ;
 
@@ -28,4 +30,7 @@ public abstract class HyenaConst {
 
     public static final HyenaMsg PONG_RESULT = new HyenaMsg(PUNCTUATION_PLUS, "PONG");
     public static final HyenaMsg ERROR_NO_BODY_SET_RESULT = new HyenaMsg(PUNCTUATION_MINUS, "ERR wrong number of arguments for 'set' command");
+
+
+
 }

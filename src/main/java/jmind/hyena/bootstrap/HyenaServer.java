@@ -47,6 +47,7 @@ public class HyenaServer {
 
         //when shutdown release all resource
         allChannels.add(channel);
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

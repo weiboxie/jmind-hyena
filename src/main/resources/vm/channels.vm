@@ -1,0 +1,52 @@
+
+<html>
+<head>
+    <title>channels统计信息</title>
+    <script src="http://static.jfaster.org/jquery/1.11.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="http://static.jfaster.org/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" >
+    <script src="http://static.jfaster.org/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="http://static.jfaster.org/bootstrap-table/1.8.1/bootstrap-table.min.css" rel="stylesheet" >
+    <script src="http://static.jfaster.org/bootstrap-table/1.8.1/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body>
+
+<div id="custom-toolbar">
+    <div class="form-inline" role="form">
+    </div>
+</div>
+
+<table
+       data-toggle="table"
+       data-show-columns="true"
+
+
+       data-detail-view="true"
+>
+
+    <thead>
+     <tr>
+         <th width="25%">ID</th>
+         <th width="25%">isConnected</th>
+         <th width="25%">remote</th>
+    </tr>
+    </thead>
+    <tbody>
+
+        #foreach( $info in $channels)
+        <tr>
+            <td>$info["id"]</td>
+            <td>$info.get("isConnected")</td>
+            <td>$!info["client"]</td>
+
+        </tr>
+        #end
+
+    </tbody>
+</table>
+
+
+</body>
+</html>

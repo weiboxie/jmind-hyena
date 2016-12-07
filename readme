@@ -1,5 +1,6 @@
 hyena(鬣狗) 是一个基于netty的rpc服务框架。采用redis的协议。 可以和redis客户端完美兼容
 达到跨平台的目的。
+源码地址：https://git.oschina.net/jmind/jmind-hyena.git
 1、
 服务端 只需实现service接口 或者 继承AbstractService实现简单Pojo封装的调用
 调用set 方法进行修改操作

@@ -24,7 +24,14 @@ public class TestClient {
    static Redis jedis=getBalanceRedis( "127.0.0.1:9527");
 
     public static void main(String[] args)  {
-testPojo();
+     while (true){
+         testPojo();
+         try {
+             TimeUnit.SECONDS.sleep(1);
+         } catch (InterruptedException e) {
+             e.printStackTrace();
+         }
+     }
     }
 
     public static void testPojo(){

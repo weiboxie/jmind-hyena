@@ -1,7 +1,6 @@
 package jmind.hyena.frame;
 
 import jmind.core.util.DataUtil;
-import jmind.core.util.TaskExecutor;
 import jmind.hyena.handler.HyenaCommand;
 import jmind.hyena.server.Filter;
 import jmind.hyena.server.Service;
@@ -9,8 +8,6 @@ import jmind.hyena.server.ServiceFactory;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
 import org.jboss.netty.channel.Channel;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,9 +91,8 @@ public class Dispatcher {
             logger.warn("remoteIp={},{}",cs.getRemoteAddress(),errMsg);
             return;
         }
-
+        long start=System.currentTimeMillis();
         try{
-            StopWatch stopWatch = new Slf4JStopWatch();
             Collection<Filter> filters = serviceFactory.getFilters(cmd.getServiceName());
             HyenaMsg hyenaMsg = new HyenaMsg();
             if(!DataUtil.isEmpty(filters)){
@@ -140,10 +136,11 @@ public class Dispatcher {
                 }
             }
             cs.write(hyenaMsg);
-            stopWatch.stop(cmd.getServiceName()+"-"+commandType);
+            StatMonitor.getStats().mustGet(cmd.getFullName()).recordSuccess(start,300);
 
         }catch (Exception e){
             cs.write(new HyenaMsg(HyenaConst.PUNCTUATION_MINUS,e.getMessage()));
+            StatMonitor.getStats().mustGet(cmd.getFullName()).recordException(start);
             logger.error(cmd.getServiceName(),e);
         }
     }

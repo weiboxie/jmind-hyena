@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>hyena manage</title>
+<style>
+body {
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+    <div><h3>hyena manage for develop.</h3></div>
+    
+    <div>
+    <form id="form" method="post" action="service" target="result" style="margin: 0px; padding: 0px;">
+        <div id="row1">
+	        <span>command</span>
+	        <select name="command" id="command" onchange="commandChange()" onkeydown="checkToSubmit(event)">
+	            <option value="get">get</option>
+	            <option value="set">set</option>
+	            <option value="exists">exists</option>
+	            <option value="ping">ping</option>
+	            <option value="keys *">keys *</option>
+	        </select>
+	        <span id="keyCon">
+	            key: <input name="key" id="key" type="text" size="100" onkeydown="checkToSubmit(event)"
+	                     title="the content in key before the first ':' is the real key for representing service">
+	        </span>
+	        <span id="prettyPrintCon">
+	        	print pretty json:<input name="prettyPrint" id="prettyPrint" type="checkbox">
+	        </span>
+	        <span>
+	            <input type="button" value="submit" onclick="submit()" onkeydown="checkToSubmit(event)">
+	        </span>
+        </div>
+        <div id="row2">
+	        <span id="valueCon">
+	            value:<textarea name="value" id="value" style="width: 100%; height:80px;"></textarea>
+	            <!--<input name="value" id="value" type="text" size="50" onkeydown="checkToSubmit(event)">-->
+	        </span>
+        </div>
+    </form>
+    </div>
+    
+    <div style="margin-top: 5px;">result:</div>
+    <div style="border: 1px dotted gray; height: 380px; margin-top: 7px; margin-bottom: 5px;">
+        <div>
+	        <iframe name="result" id="result" width="100%" 
+	                style='overflow: auto; border: 0px solid black; width: 100%; height: 380px;' frameborder='0'
+	                src="service">
+	        </iframe>
+        </div>
+    </div>
+    
+    <div>
+    	<span style="font-weight: bold">notice:</span> <br>the content in key before the first ":" is the real key for representing service.<br>
+        the content in key after the first ":" deal as parameters
+    </div>
+    
+    <br>
+    <hr>
+</body>
+<script>
+function commandChange() {
+    var command = document.getElementById("command");
+    var keyCon = document.getElementById("keyCon");
+    var valueCon = document.getElementById("valueCon");
+    var prettyPrintCon = document.getElementById("prettyPrintCon");
+    
+    if(command.value == "get" || command.value == "exists") {
+        valueCon.style.display = "none";
+        keyCon.style.display = "inline";
+    } else if(command.value == "ping" || command.value == "keys *") {
+        keyCon.style.display = "none";
+        valueCon.style.display = "none";
+    } else if(command.value == "set") {
+        keyCon.style.display = "inline";
+        valueCon.style.display = "inline";
+    }
+    
+    if(command.value == "get" || command.value == "set") {
+        prettyPrintCon.style.display = "inline";
+    } else {
+        prettyPrintCon.style.display = "none";
+    }
+}
+commandChange();
+
+function getKeyCode(evt) {
+	var evt = evt ? evt : (window.event ? window.event : null);
+	var code = evt.which ? evt.which : evt.keyCode;
+	return code;
+}
+function checkToSubmit(event) {
+    var kc = event.keyCode;
+    if(kc == 13) {
+        submit();
+    }
+}
+function submit() {
+    var form = document.getElementById("form");
+    form.submit();
+}
+
+</script>
+</html>

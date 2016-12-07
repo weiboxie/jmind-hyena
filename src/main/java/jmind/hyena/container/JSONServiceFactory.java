@@ -90,4 +90,9 @@ public class JSONServiceFactory implements ServiceFactory{
     public Collection<Daemon> getDaemons() {
         return daemons;
     }
+
+    @Override
+    public Collection<String> getServices() {
+        return services.keySet();
+    }
 }

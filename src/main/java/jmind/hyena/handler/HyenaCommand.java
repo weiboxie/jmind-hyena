@@ -62,4 +62,8 @@ public class HyenaCommand implements Serializable {
 		return value;
 	}
 
+	public String getFullName(){
+		return serviceName+"-"+command.name();
+	}
+
 }

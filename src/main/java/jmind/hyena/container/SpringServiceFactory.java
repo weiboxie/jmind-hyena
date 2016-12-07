@@ -6,6 +6,7 @@ import jmind.hyena.server.Service;
 import jmind.hyena.server.ServiceFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -29,5 +30,10 @@ public class SpringServiceFactory implements ServiceFactory{
     @Override
     public Collection<Daemon> getDaemons() {
         return context.getBeansOfType(Daemon.class).values();
+    }
+
+    @Override
+    public Collection<String> getServices() {
+        return Arrays.asList(context.getBeanNamesForType(Service.class));
     }
 }

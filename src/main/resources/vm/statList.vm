@@ -1,0 +1,96 @@
+
+<html>
+<head>
+    <title>hyena service统计信息</title>
+
+    <script src="http://static.jfaster.org/jquery/1.11.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="http://static.jfaster.org/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" >
+    <script src="http://static.jfaster.org/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="http://static.jfaster.org/bootstrap-table/1.8.1/bootstrap-table.min.css" rel="stylesheet" >
+    <script src="http://static.jfaster.org/bootstrap-table/1.8.1/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div id="custom-toolbar">
+    <div class="form-inline" role="form">
+        <button id="clear-stats" type="button" class="btn btn-default">清空状态</button>
+    </div>
+</div>
+
+<table id="mango-stats-table"
+       data-toggle="table"
+       data-show-columns="true"
+
+      >
+    <thead>
+    <tr>
+
+
+        <th data-field="key" data-sortable="true" data-switchable="false">服务</th>
+        <th data-field="successCount" data-sortable="true" data-sorter="intSorter" data-switchable="false">成功次数</th>
+        <th data-field="successAvg" data-sortable="true" data-sorter="floatSorter" data-switchable="false">平均成功时间</th>
+        <th data-field="exceptionCount" data-sortable="true" data-sorter="intSorter" data-switchable="false">异常次数</th>
+        <th data-field="exceptionAvg" data-sortable="true" data-sorter="floatSorter" data-switchable="false">平均异常时间</th>
+        <th data-field="sum" data-sortable="true" data-sorter="intSorter" data-switchable="false">总次数</th>
+        <th data-field="sumAvg" data-sortable="true" data-sorter="floatSorter" data-switchable="false">平均时间</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+        #foreach( $info in $statList)
+        <tr>
+            <td>$info.key</td>
+            <td>$info.successCount</td>
+            <td>$info.successAvg</td>
+            <td>$info.exceptionCount</td>
+            <td>$info.exceptionAvg</td>
+            <td>$info.sum</td>
+            <td>$info.sumAvg</td>
+        </tr>
+        #end
+
+    </tbody>
+</table>
+
+<script>
+
+
+    function intSorter(s1, s2) {
+        var n1 = parseInt(s1);
+        var n2 = parseInt(s2);
+        if (n1 > n2) return 1;
+        if (n1 < n2) return -1;
+        return 0;
+    }
+    function floatSorter(s1, s2) {
+        var n1 = parseFloat(s1);
+        var n2 = parseFloat(s2);
+        if (n1 > n2) return 1;
+        if (n1 < n2) return -1;
+        return 0;
+    }
+    function rateSorter(s1, s2) {
+        s1 = s1.substring(0, s1.length - 1);
+        s2 = s2.substring(0, s2.length - 1);
+        var n1 = parseFloat(s1);
+        var n2 = parseFloat(s2);
+        if (n1 > n2) return 1;
+        if (n1 < n2) return -1;
+        return 0;
+    }
+
+
+
+    $(function() {
+        $("#clear-stats").click(function(){
+            var action = window.location.pathname + "?type=clear";
+            window.location.href = action;
+        });
+    });
+</script>
+</body>
+</html>
