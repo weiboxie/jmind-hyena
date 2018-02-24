@@ -1,7 +1,8 @@
 package jmind.hyena.frame;
 
-import jmind.core.algo.atomic.StatsCounter;
-import jmind.core.algo.atomic.StatsCounterMap;
+
+
+import jmind.base.algo.atomic.StatsCounterMap;
 
 import java.util.List;
 

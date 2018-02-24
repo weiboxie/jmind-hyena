@@ -1,6 +1,7 @@
 package jmind.hyena.bootstrap;
 
-import jmind.core.util.DataUtil;
+
+import jmind.base.util.DataUtil;
 import jmind.hyena.handler.HyenaServerPipelineFactory;
 import jmind.hyena.server.Daemon;
 import jmind.hyena.util.HyenaUtil;

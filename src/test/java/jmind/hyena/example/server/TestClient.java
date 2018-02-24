@@ -2,17 +2,14 @@ package jmind.hyena.example.server;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import jmind.core.lang.SourceProperties;
-import jmind.core.lang.shard.LoadBalance;
-import jmind.core.lang.shard.RoundRobinLoadBalance;
-import jmind.core.redis.*;
-import jmind.core.util.RandUtil;
-import jmind.core.util.TaskExecutor;
-import jmind.hyena.example.pojo.MyPojo;
-import redis.clients.jedis.Jedis;
+import jmind.base.lang.shard.LoadBalance;
+import jmind.base.util.RandUtil;
+import jmind.base.util.TaskExecutor;
+import jmind.core.redis.HyneaLoadBalanceRedis;
+import jmind.core.redis.NioRedis;
+import jmind.core.redis.Redis;
+import jmind.core.redis.ShardedRedis;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +47,7 @@ String myPojo="name=x&id=101&email=weibo@126.com";
         String key="sample";
 
         while (true){
-            String value=RandUtil.randomCode(4,true);
+            String value= RandUtil.randomCode(4,true);
             System.out.println(jedis.get(key+"?"+value));
             System.out.println(jedis.get(key+"?"+value));
             System.out.println(jedis.set(key,value));
@@ -116,7 +113,7 @@ String myPojo="name=x&id=101&email=weibo@126.com";
     }
 
     static Redis getSharedRedis(String hosts){
-        return new ShardedRedis(hosts,1000,10,10);
+        return new ShardedRedis(hosts,1000,10,10,null);
     }
 
     static Redis getBalanceRedis(String hosts){

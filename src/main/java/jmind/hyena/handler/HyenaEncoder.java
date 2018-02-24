@@ -1,6 +1,7 @@
 package jmind.hyena.handler;
 
-import jmind.core.util.DataUtil;
+
+import jmind.base.util.DataUtil;
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;

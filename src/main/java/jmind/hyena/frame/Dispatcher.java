@@ -1,6 +1,7 @@
 package jmind.hyena.frame;
 
-import jmind.core.util.DataUtil;
+
+import jmind.base.util.DataUtil;
 import jmind.hyena.handler.HyenaCommand;
 import jmind.hyena.server.Filter;
 import jmind.hyena.server.Service;

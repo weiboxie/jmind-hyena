@@ -1,6 +1,7 @@
 package jmind.hyena.frame;
 
-import jmind.core.util.TaskExecutor;
+
+import jmind.base.util.TaskExecutor;
 import jmind.hyena.handler.HyenaCommand;
 import org.jboss.netty.channel.Channel;
 

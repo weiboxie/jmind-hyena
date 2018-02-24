@@ -1,9 +1,10 @@
 package jmind.hyena.container.web.servlet;
 
 import com.alibaba.fastjson.JSON;
+import jmind.base.util.DataUtil;
 import jmind.core.redis.NioRedis;
 import jmind.core.redis.Redis;
-import jmind.core.util.DataUtil;
+
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
 

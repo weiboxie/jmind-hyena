@@ -2,10 +2,10 @@ package jmind.hyena.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import jmind.core.util.CollectionsUtil;
-import jmind.core.util.DataUtil;
-import jmind.core.util.GlobalConstants;
-import jmind.core.util.JmindLoader;
+
+import jmind.base.util.DataUtil;
+import jmind.base.util.GlobalConstants;
+import jmind.base.util.JmindLoader;
 import jmind.hyena.server.ServiceFactory;
 
 import java.io.UnsupportedEncodingException;
