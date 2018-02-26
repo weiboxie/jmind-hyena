@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import jmind.base.lang.shard.LoadBalance;
 import jmind.base.util.RandUtil;
 import jmind.base.util.TaskExecutor;
-import jmind.core.redis.HyneaLoadBalanceRedis;
-import jmind.core.redis.NioRedis;
-import jmind.core.redis.Redis;
-import jmind.core.redis.ShardedRedis;
+import jmind.core.redis.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TestClient {
 
-   static Redis jedis=getBalanceRedis( "127.0.0.1:9527");
+   static Redis jedis=getRedis( "127.0.0.1:9527");
 
     public static void main(String[] args)  {
      while (true){
@@ -108,8 +105,8 @@ String myPojo="name=x&id=101&email=weibo@126.com";
 
     static Redis getRedis(String hosts){
 
-       return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
-     //  return new SingleJedis(hosts,100,100,100,null);
+      // return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
+      return new SingleJedis(hosts,100,100,100,null);
     }
 
     static Redis getSharedRedis(String hosts){
