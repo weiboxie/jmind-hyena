@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import jmind.base.lang.shard.LoadBalance;
 import jmind.base.util.RandUtil;
 import jmind.base.util.TaskExecutor;
-import jmind.core.redis.HyneaLoadBalanceRedis;
-import jmind.core.redis.NioRedis;
-import jmind.core.redis.Redis;
-import jmind.core.redis.ShardedRedis;
+import jmind.core.redis.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -18,27 +15,34 @@ import java.util.concurrent.TimeUnit;
  */
 public class TestClient {
 
-   static Redis jedis=getBalanceRedis( "127.0.0.1:9527");
+   static Redis jedis=getRedis( "127.0.0.1:9527");
 
     public static void main(String[] args)  {
-     while (true){
-         testPojo();
-         try {
-             TimeUnit.SECONDS.sleep(1);
-         } catch (InterruptedException e) {
-             e.printStackTrace();
-         }
-     }
+        System.err.println("start");
+        System.err.println(jedis.set("abc","w"));
+        System.err.println("jj-"+jedis.get("abc"));
+        System.err.println("over");
+        int i=0;
+//     while (i++<10){
+//         testPojo();
+//         try {
+//            TimeUnit.MILLISECONDS.sleep(1);
+//         } catch (InterruptedException e) {
+//             e.printStackTrace();
+//         }
+//     }
     }
 
     public static void testPojo(){
         String key="mypojo";
 String myPojo="name=x&id=101&email=weibo@126.com";
-        String get = jedis.get(key + "?" + myPojo);
-        System.out.println(get);
+
 
         String set = jedis.set(key+"?name=x", myPojo.toString());
         System.out.println(set);
+
+        String get = jedis.get(key + "?" + myPojo);
+        System.out.println(get);
 
 
     }
@@ -108,8 +112,8 @@ String myPojo="name=x&id=101&email=weibo@126.com";
 
     static Redis getRedis(String hosts){
 
-       return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
-     //  return new SingleJedis(hosts,100,100,100,null);
+       //return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
+      return new SingleJedis(hosts,10000,10,10,null);
     }
 
     static Redis getSharedRedis(String hosts){

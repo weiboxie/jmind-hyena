@@ -3,7 +3,7 @@ package jmind.hyena.example.service;
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.handler.HyenaCommand;
 import jmind.hyena.server.Filter;
-import org.jboss.netty.channel.Channel;
+
 
 /**
  * Created by xieweibo on 2016/11/30.

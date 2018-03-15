@@ -1,14 +1,16 @@
 package jmind.hyena.handler;
 
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import jmind.core.log.LogUtil;
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,22 +20,29 @@ import java.util.List;
  * decoder
  Created by xieweibo on 2016/11/28.
  */
-public class HyenaDecoder extends FrameDecoder {
+public class HyenaDecoder extends LengthFieldBasedFrameDecoder {
 
 	public HyenaDecoder(){
+
+		super(1024,0,2);
 		LogUtil.info("init HyenaDecoder");
 	}
 
 
-	
+//	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+//		Object o = decode(channelHandlerContext, byteBuf);
+//		list.add(o);
+//	}
+
+
 	//private List<Byte> bytes = new LinkedList<Byte>();
 	//private Command command = new Command();
-	
-	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer) throws Exception {
 
-		 List<Byte> bytes = new LinkedList<Byte>();
+
+	protected Object decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
+		Channel channel = ctx.channel();
+
+		List<Byte> bytes = new LinkedList<Byte>();
 		 Command command = new Command();
 
 		while(buffer.readableBytes() > 0) {

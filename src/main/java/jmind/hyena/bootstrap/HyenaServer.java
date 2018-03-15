@@ -1,63 +1,80 @@
 package jmind.hyena.bootstrap;
 
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+import io.netty.util.concurrent.DefaultThreadFactory;
 import jmind.base.util.DataUtil;
+import jmind.base.util.GlobalConstants;
+import jmind.core.cache.support.ConcurrentLinkedHashMap;
 import jmind.hyena.handler.HyenaServerPipelineFactory;
 import jmind.hyena.server.Daemon;
 import jmind.hyena.util.HyenaUtil;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.group.ChannelGroup;
-import org.jboss.netty.channel.group.ChannelGroupFuture;
-import org.jboss.netty.channel.group.DefaultChannelGroup;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetSocketAddress;
+
 import java.util.Collection;
-import java.util.concurrent.Executors;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * Created by xieweibo on 2016/11/29.
  */
 public class HyenaServer {
 
-    public static final ChannelGroup allChannels = new DefaultChannelGroup("hyena-server");
+    public final static Map<String, Channel> allChannels=new ConcurrentHashMap<>(); // <ip:port, channel>
 
-    Logger logger= LoggerFactory.getLogger(getClass());
+  final Logger logger= LoggerFactory.getLogger(getClass());
 
 
     /** start server */
     public void run(int port) {
         //1.start  server
-        final ServerBootstrap bootstrap = new ServerBootstrap(
-                new NioServerSocketChannelFactory(
-                        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2),
-                        Executors.newCachedThreadPool()));
+        ServerBootstrap   bootstrap = new ServerBootstrap();
 
-        final ChannelPipelineFactory channelPipelineFactory = new HyenaServerPipelineFactory();
-        bootstrap.setPipelineFactory(channelPipelineFactory);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("NettyServerBoss", true));
+        EventLoopGroup workerGroup = new NioEventLoopGroup(GlobalConstants.NCPU+1,
+                new DefaultThreadFactory("NettyServerWorker", true));
 
-        bootstrap.setOption("child.tcpNoDelay", true);
-        bootstrap.setOption("child.keepAlive", true);
 
-        Channel channel = bootstrap.bind(new InetSocketAddress(port));
-        logger.info("Hynea server started, listenning at " + port);
 
-        //when shutdown release all resource
-        allChannels.add(channel);
+        bootstrap.group(bossGroup, workerGroup)
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 1024)
+                .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
+                .childOption(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                logger.info("Hynea release channel resource before exit");
-                ChannelGroupFuture future = allChannels.close();
-                future.awaitUninterruptibly(10000);// 10 sec for time out
-                bootstrap.releaseExternalResources();
-            }
-        });
+                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .childHandler(new HyenaServerPipelineFactory());
+
+
+
+
+        try {
+//            // bind
+           ChannelFuture channelFuture = bootstrap.bind(port);
+           channelFuture.syncUninterruptibly();
+
+ //           ChannelFuture channelFuture = bootstrap.bind(port).sync();
+//
+//            // 等待服务端监听端口关闭
+//            channelFuture.channel().closeFuture().sync();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            // 优雅退出，释放线程池资源
+         //   bossGroup.shutdownGracefully();
+         //   workerGroup.shutdownGracefully();
+        }
+
 
         //run daemon
          daemon();

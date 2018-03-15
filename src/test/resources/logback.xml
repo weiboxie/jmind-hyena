@@ -17,8 +17,9 @@
       <Pattern>%d{HH:mm:ss} %level [%logger{5}] %msg%n</Pattern>  
       <charset>utf-8</charset> 
     </encoder> 
-  </appender>  
-  <appender name="perf4jFile" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
+  </appender>
+
+ <!-- <appender name="perf4jFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
       <FileNamePattern>/yc/logs/perf4j%d{yyyyMMdd}.log</FileNamePattern>  
       <MaxHistory>10</MaxHistory> 
@@ -31,7 +32,9 @@
   <appender name="CoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender"> 
     <param name="TimeSlice" value="60000"/>  
     <appender-ref ref="perf4jFile"/> 
-  </appender>  
+  </appender>-->
+
+
   <appender name="jmind" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
       <FileNamePattern>/yc/logs/jmind%d{yyyyMMdd}.log</FileNamePattern>  
@@ -64,9 +67,9 @@
   </appender>  
 
 
-  <logger name="org.perf4j.TimingLogger" level="debug" additivity="false"> 
+  <!--<logger name="org.perf4j.TimingLogger" level="debug" additivity="false">
     <appender-ref ref="CoalescingStatistics"/> 
-  </logger>  
+  </logger>  -->
   <logger name="jmind" level="debug" additivity="false"> 
     <appender-ref ref="jmind"/>
   </logger>  

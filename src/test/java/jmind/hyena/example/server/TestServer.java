@@ -12,6 +12,6 @@ public class TestServer {
     public static void main(String[] args) {
         // HyenaConst.multithreading=true;
         new HyenaServer().run(9527);
-        JettyServer.start(8088);
+        JettyServer.start(8087);
     }
 }

@@ -5,6 +5,7 @@ import jmind.base.util.DataUtil;
 import jmind.core.redis.NioRedis;
 import jmind.core.redis.Redis;
 
+import jmind.core.redis.SingleJedis;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
 
@@ -21,7 +22,7 @@ import java.util.Collection;
  */
 public class ServiceServlet extends HttpServlet {
 	
-	private static Redis redis = new NioRedis(HyenaConst.server_hosts,3000);
+	private static Redis redis = new SingleJedis(HyenaConst.server_hosts,3000,10,10,null);
 
 	@Override
 	public void destroy() {

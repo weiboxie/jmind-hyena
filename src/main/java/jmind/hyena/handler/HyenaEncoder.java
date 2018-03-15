@@ -1,25 +1,33 @@
 package jmind.hyena.handler;
 
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 import jmind.base.util.DataUtil;
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
+
 
 /**
  * Created by xieweibo on 2016/11/28.
  */
-public class HyenaEncoder extends OneToOneEncoder {
+public class HyenaEncoder extends MessageToByteEncoder<HyenaMsg> {
 
-    protected Object encode(ChannelHandlerContext ctx, Channel channel,
-                            Object msg) throws Exception {
-        HyenaMsg rctn = (HyenaMsg) msg;
-        ChannelBuffer buf = ChannelBuffers.dynamicBuffer();
+    @Override
+    protected void encode(ChannelHandlerContext channelHandlerContext, HyenaMsg rctn, ByteBuf buf) throws Exception {
+      //  Channel channel = channelHandlerContext.channel();
+
+        // 创建动态bytebuf
+//        Unpooled.directBuffer();
+//        Unpooled.buffer();
+
+
+
 
         buf.writeByte(rctn.getPunctuation());
         //($) 表示下一行数据长度，不包括换行符长度\r\n,$后面则是对应的长度的数据。
@@ -47,8 +55,11 @@ public class HyenaEncoder extends OneToOneEncoder {
             buf.writeByte('\n');
         }
 
-        return buf;
+
     }
+
+
+
 
 
 }

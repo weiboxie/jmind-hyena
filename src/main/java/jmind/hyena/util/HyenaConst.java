@@ -8,6 +8,7 @@ import jmind.hyena.frame.HyenaMsg;
  */
 public abstract class HyenaConst {
 
+
     // 是否启动多线程
     public static boolean multithreading=false ;
     public static String server_hosts ="127.0.0.1:9527" ;
