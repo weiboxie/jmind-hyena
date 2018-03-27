@@ -73,7 +73,7 @@ public class JSONServiceFactory implements ServiceFactory{
     }
 
     @Override
-    public Collection<Filter> getFilters(String name) {
+    public List<Filter> getFilters(String name) {
         if(DataUtil.isEmpty(filters))
             return Collections.emptyList();
         if(filters.containsKey("*")){

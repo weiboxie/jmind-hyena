@@ -6,6 +6,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.ReplayingDecoder;
 import jmind.core.log.LogUtil;
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.util.HyenaConst;
@@ -18,28 +19,33 @@ import java.util.List;
 
 /**
  * decoder
+ set name helloworl
+ *3\r\n
+ $3\r\n
+ set\r\n
+ $4\r\n
+ name\r\n
+ $10\r\n
+ helloworld\r\n
  Created by xieweibo on 2016/11/28.
  */
-public class HyenaDecoder extends LengthFieldBasedFrameDecoder {
+public class HyenaDecoder extends ReplayingDecoder<Void> {
 
-	public HyenaDecoder(){
 
-		super(1024,0,2);
-		LogUtil.info("init HyenaDecoder");
+
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		HyenaCommand cmd = decode(ctx, in);
+		if(cmd!=null){
+			out.add(cmd);
+		}
+
 	}
 
 
-//	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-//		Object o = decode(channelHandlerContext, byteBuf);
-//		list.add(o);
-//	}
 
 
-	//private List<Byte> bytes = new LinkedList<Byte>();
-	//private Command command = new Command();
-
-
-	protected Object decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
+	private HyenaCommand decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
 		Channel channel = ctx.channel();
 
 		List<Byte> bytes = new LinkedList<Byte>();
@@ -97,9 +103,9 @@ public class HyenaDecoder extends LengthFieldBasedFrameDecoder {
 					command.stat = Stat.paramHead;
 				}
 				else if(command.currentParamNum == command.paramNum) {
-					List<byte[]> temp = new ArrayList<>();
-					temp.addAll(command.params);
-					HyenaCommand zcmd = new HyenaCommand(temp);
+//					List<byte[]> temp = new ArrayList<>();
+//					temp.addAll(command.params);
+					HyenaCommand zcmd = new HyenaCommand(command.params);
 					command.clear();
 					
 					return zcmd;
@@ -111,14 +117,14 @@ public class HyenaDecoder extends LengthFieldBasedFrameDecoder {
 		return null;
 	}
 	
-	private Object invalidateProtocal(Channel channel) {
+	private HyenaCommand invalidateProtocal(Channel channel) {
 		channel.write(new HyenaMsg(HyenaConst.PUNCTUATION_MINUS, "invalidate protocal"));
 		channel.close();
 		return null;
 	}
-	
 
-	
+
+
 	private enum Stat {
 		head, 
 		paramHead,

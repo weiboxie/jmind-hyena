@@ -7,10 +7,15 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import jmind.base.util.DataUtil;
 import jmind.base.util.GlobalConstants;
 import jmind.core.cache.support.ConcurrentLinkedHashMap;
+import jmind.hyena.handler.HyenaDecoder;
+import jmind.hyena.handler.HyenaEncoder;
+import jmind.hyena.handler.HyenaServerHandler;
 import jmind.hyena.handler.HyenaServerPipelineFactory;
 import jmind.hyena.server.Daemon;
 import jmind.hyena.util.HyenaUtil;
@@ -38,41 +43,40 @@ public class HyenaServer {
     public void run(int port) {
         //1.start  server
         ServerBootstrap   bootstrap = new ServerBootstrap();
-
+        final DefaultEventExecutorGroup group = new DefaultEventExecutorGroup(1);
         EventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("NettyServerBoss", true));
         EventLoopGroup workerGroup = new NioEventLoopGroup(GlobalConstants.NCPU+1,
                 new DefaultThreadFactory("NettyServerWorker", true));
 
-
-
-        bootstrap.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 1024)
-                .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
-                .childOption(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
-
-                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .childHandler(new HyenaServerPipelineFactory());
-
-
-
-
         try {
-//            // bind
-           ChannelFuture channelFuture = bootstrap.bind(port);
-           channelFuture.syncUninterruptibly();
+            bootstrap.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 1024)
+                    .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
+                    .childOption(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
+                    .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                    .localAddress(port)
+                    .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                        @Override
+                        public void initChannel(NioSocketChannel ch) throws Exception {
+                            ChannelPipeline p = ch.pipeline();
+//             p.addLast(new ByteLoggingHandler(LogLevel.INFO));
+                            p.addLast(new HyenaDecoder());
+                            p.addLast(new HyenaEncoder());
+                            p.addLast(group, new HyenaServerHandler());
+                        }
+                    });
 
- //           ChannelFuture channelFuture = bootstrap.bind(port).sync();
-//
-//            // 等待服务端监听端口关闭
-//            channelFuture.channel().closeFuture().sync();
-        } catch (Exception e) {
+            // Start the server.
+            ChannelFuture f = bootstrap.bind(port).sync();
+
+            // Wait until the server socket is closed.
+            f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-
         } finally {
-            // 优雅退出，释放线程池资源
-         //   bossGroup.shutdownGracefully();
-         //   workerGroup.shutdownGracefully();
+            // Shut down all event loops to terminate all threads.
+            group.shutdownGracefully();
         }
 
 

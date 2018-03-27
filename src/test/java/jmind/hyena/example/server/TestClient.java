@@ -18,19 +18,16 @@ public class TestClient {
    static Redis jedis=getRedis( "127.0.0.1:9527");
 
     public static void main(String[] args)  {
-        System.err.println("start");
-        System.err.println(jedis.set("abc","w"));
-        System.err.println("jj-"+jedis.get("abc"));
-        System.err.println("over");
+
         int i=0;
-//     while (i++<10){
-//         testPojo();
-//         try {
-//            TimeUnit.MILLISECONDS.sleep(1);
-//         } catch (InterruptedException e) {
-//             e.printStackTrace();
-//         }
-//     }
+     while (i++<10){
+         testPojo();
+         try {
+            TimeUnit.MILLISECONDS.sleep(1);
+         } catch (InterruptedException e) {
+             e.printStackTrace();
+         }
+     }
     }
 
     public static void testPojo(){

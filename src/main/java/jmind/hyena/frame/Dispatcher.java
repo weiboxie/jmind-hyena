@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 事件分发
@@ -95,7 +96,7 @@ public class Dispatcher {
         }
         long start=System.currentTimeMillis();
         try{
-            Collection<Filter> filters = serviceFactory.getFilters(cmd.getServiceName());
+            List<Filter> filters = serviceFactory.getFilters(cmd.getServiceName());
             HyenaMsg hyenaMsg = new HyenaMsg();
             if(!DataUtil.isEmpty(filters)){
                 for (Filter filter : filters) {
@@ -133,8 +134,8 @@ public class Dispatcher {
                 }
             }
             if(!DataUtil.isEmpty(filters)){
-                for (Filter filter : filters) {
-                    filter.afterService(cmd, hyenaMsg);
+                for (int i=filters.size()-1;i>=0;i--) {
+                    filters.get(i).afterService(cmd, hyenaMsg);
                 }
             }
             cs.write(hyenaMsg);

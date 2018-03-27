@@ -1,6 +1,7 @@
 package jmind.hyena.server;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by xieweibo on 2016/11/29.
@@ -18,7 +19,7 @@ public interface ServiceFactory {
      * @param name
      * @return
      */
-    Collection<Filter> getFilters(String name);
+    List<Filter> getFilters(String name);
 
     Collection<Daemon> getDaemons();
 

@@ -10,7 +10,7 @@
   </appender>  
   <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
-      <FileNamePattern>/yc/logs/dispatch%d{yyyyMMdd}.log</FileNamePattern>  
+      <FileNamePattern>~/logs/dispatch%d{yyyyMMdd}.log</FileNamePattern>
       <MaxHistory>10</MaxHistory> 
     </rollingPolicy>  
     <encoder> 
@@ -37,7 +37,7 @@
 
   <appender name="jmind" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
-      <FileNamePattern>/yc/logs/jmind%d{yyyyMMdd}.log</FileNamePattern>  
+      <FileNamePattern>~/logs/jmind%d{yyyyMMdd}.log</FileNamePattern>
       <MaxHistory>3</MaxHistory> 
     </rollingPolicy>  
     <encoder> 
