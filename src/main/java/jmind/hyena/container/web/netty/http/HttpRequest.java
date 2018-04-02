@@ -16,7 +16,9 @@ import java.net.InetAddress;
 import java.security.Principal;
 import java.util.*;
 
-
+/**
+ * @Author: xieweibo
+ */
 public class HttpRequest implements HttpServletRequest {
 
     private io.netty.handler.codec.http.HttpRequest request;
