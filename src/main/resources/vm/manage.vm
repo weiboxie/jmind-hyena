@@ -52,8 +52,8 @@ body {
     </div>
     
     <div>
-    	<span style="font-weight: bold">notice:</span> <br>the content in key before the first ":" is the real key for representing service.<br>
-        the content in key after the first ":" deal as parameters
+    	<span style="font-weight: bold">notice:</span> <br>the content in key before the first "?" is the real key for representing service.<br>
+        the content in key after the first "?" deal as parameters
     </div>
     
     <br>

@@ -81,7 +81,7 @@ public class HyenaServer {
 
 
         //run daemon
-         daemon();
+       //  daemon();
 
 
 

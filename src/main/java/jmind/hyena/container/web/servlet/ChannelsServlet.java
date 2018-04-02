@@ -44,7 +44,7 @@ public class ChannelsServlet extends HttpServlet {
                 Map<String,Object> map=new HashMap();
                 map.put("isConnected",channel.isActive());
                 map.put("client",client);
-         //       map.put("id",channel.id());
+                map.put("id",channel.id());
                 list.add(map);
             }
 
