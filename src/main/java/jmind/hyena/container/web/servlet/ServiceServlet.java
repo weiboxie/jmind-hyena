@@ -20,7 +20,7 @@ import java.util.Collection;
  */
 public class ServiceServlet extends HttpServlet {
 	
-	//private static Redis redis = new NioRedis(HyenaConst.server_hosts,3000);
+
 	private static Redis redis = new SingleJedis(HyenaConst.server_hosts,3000,10,10,null);
 
 	@Override

@@ -1,46 +1,57 @@
 package jmind.hyena.handler;
 
+import io.netty.channel.*;
+import jmind.base.util.AddrUtil;
 import jmind.hyena.bootstrap.HyenaServer;
 import jmind.hyena.frame.Dispatcher;
-import org.jboss.netty.channel.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.InetSocketAddress;
 
 /**
  * Created by xieweibo on 2016/11/28.
  */
-public class HyenaServerHandler extends SimpleChannelUpstreamHandler {
+public class HyenaServerHandler extends SimpleChannelInboundHandler<HyenaCommand> {
 
     static final Logger logger = LoggerFactory.getLogger(HyenaServerHandler.class);
 
 
 
+
+
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
-            throws Exception {
-        Dispatcher.getInstance().dispatch((HyenaCommand) e.getMessage(), e.getChannel());
+    protected void channelRead0(ChannelHandlerContext ctx, HyenaCommand msg) throws Exception {
+        Dispatcher.getInstance().dispatch(msg, ctx.channel());
     }
 
     @Override
-    public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e)
-            throws Exception {
-        logger.debug(ctx.getChannel().getId()+"channel added:" + e.getChannel().getId());
-        HyenaServer.allChannels.add(e.getChannel());
-       // ClientSession.createClientSession(ctx.getChannel());
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
+    }
+
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.fireChannelActive();
+        HyenaServer.allChannels.put(AddrUtil.toAddressString((InetSocketAddress) ctx.channel().remoteAddress()), ctx.channel());
+
+
     }
 
     @Override
-    public void channelDisconnected(ChannelHandlerContext ctx,
-                                    ChannelStateEvent e) throws Exception {
-        logger.debug(ctx.getChannel().getId() + " disconnected");
-        HyenaServer.allChannels.remove(e.getChannel());
-      //  ClientSession.destroy(ctx.getChannel());
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        ctx.fireChannelInactive();
+        ctx.close();
+        HyenaServer.allChannels.remove(AddrUtil.toAddressString((InetSocketAddress) ctx.channel().remoteAddress()));
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
-            throws Exception {
-        logger.error("exception:" + e.getChannel() + " " + e.getCause().getMessage());
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.fireExceptionCaught(cause);
+        logger.error("exception:" + ctx.channel() + " " + cause.getMessage(),cause);
 
     }
 }

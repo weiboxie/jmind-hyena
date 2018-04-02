@@ -18,10 +18,12 @@ public class TestClient {
    static Redis jedis=getRedis( "127.0.0.1:9527");
 
     public static void main(String[] args)  {
-     while (true){
+
+        int i=0;
+     while (i++<10){
          testPojo();
          try {
-             TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(1);
          } catch (InterruptedException e) {
              e.printStackTrace();
          }
@@ -31,11 +33,13 @@ public class TestClient {
     public static void testPojo(){
         String key="mypojo";
 String myPojo="name=x&id=101&email=weibo@126.com";
-        String get = jedis.get(key + "?" + myPojo);
-        System.out.println(get);
+
 
         String set = jedis.set(key+"?name=x", myPojo.toString());
         System.out.println(set);
+
+        String get = jedis.get(key + "?" + myPojo);
+        System.out.println(get);
 
 
     }
@@ -105,8 +109,10 @@ String myPojo="name=x&id=101&email=weibo@126.com";
 
     static Redis getRedis(String hosts){
 
-      // return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
-      return new SingleJedis(hosts,100,100,100,null);
+
+       //return new NioRedis(hosts,1000, LoadBalance.Balance.RoundRobin);
+      return new SingleJedis(hosts,10000,10,10,null);
+
     }
 
     static Redis getSharedRedis(String hosts){

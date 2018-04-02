@@ -1,6 +1,7 @@
 package jmind.hyena.frame;
 
 
+import io.netty.channel.Channel;
 import jmind.base.util.DataUtil;
 import jmind.hyena.handler.HyenaCommand;
 import jmind.hyena.server.Filter;
@@ -8,11 +9,12 @@ import jmind.hyena.server.Service;
 import jmind.hyena.server.ServiceFactory;
 import jmind.hyena.util.HyenaConst;
 import jmind.hyena.util.HyenaUtil;
-import org.jboss.netty.channel.Channel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 事件分发
@@ -45,7 +47,7 @@ public class Dispatcher {
         if (commandType == null) {
             String errMsg="ERR unknown command '" + cmd.getValue() + "'";
             cs.write(new HyenaMsg(HyenaConst.PUNCTUATION_MINUS, errMsg));
-            logger.warn("remoteIp={},{}",cs.getRemoteAddress(),errMsg);
+            logger.warn("remoteIp={},{}",cs.remoteAddress(),errMsg);
             return;
         }
 
@@ -57,7 +59,7 @@ public class Dispatcher {
             }
             //3.quit command
             case QUIT: {
-                logger.info("remoteIp={} quit",cs.getRemoteAddress());
+                logger.info("remoteIp={} quit",cs.remoteAddress());
                 cs.close();
                 return;
             }
@@ -81,7 +83,7 @@ public class Dispatcher {
         if (DataUtil.isEmpty(cmd.getServiceName())) {
             String errMsg= "ERR wrong number of arguments for '" + cmd.getCommand() + "' command";
             cs.write(new HyenaMsg(HyenaConst.PUNCTUATION_MINUS,errMsg));
-            logger.warn("remoteIp={},{}",cs.getRemoteAddress(),errMsg);
+            logger.warn("remoteIp={},{}",cs.remoteAddress(),errMsg);
             return;
         }
 
@@ -89,12 +91,12 @@ public class Dispatcher {
         if(service==null){
            String errMsg="ERR the service  '" + cmd.getServiceName() + "' doesn't exists";
             cs.write(new HyenaMsg(HyenaConst.PUNCTUATION_MINUS,  errMsg));
-            logger.warn("remoteIp={},{}",cs.getRemoteAddress(),errMsg);
+            logger.warn("remoteIp={},{}",cs.remoteAddress(),errMsg);
             return;
         }
         long start=System.currentTimeMillis();
         try{
-            Collection<Filter> filters = serviceFactory.getFilters(cmd.getServiceName());
+            List<Filter> filters = serviceFactory.getFilters(cmd.getServiceName());
             HyenaMsg hyenaMsg = new HyenaMsg();
             if(!DataUtil.isEmpty(filters)){
                 for (Filter filter : filters) {
@@ -132,8 +134,8 @@ public class Dispatcher {
                 }
             }
             if(!DataUtil.isEmpty(filters)){
-                for (Filter filter : filters) {
-                    filter.afterService(cmd, hyenaMsg);
+                for (int i=filters.size()-1;i>=0;i--) {
+                    filters.get(i).afterService(cmd, hyenaMsg);
                 }
             }
             cs.write(hyenaMsg);

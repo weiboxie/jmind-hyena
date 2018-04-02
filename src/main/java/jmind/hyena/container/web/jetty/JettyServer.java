@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * http web server for config and management
- * @author xieweibi
+ * @author xieweibo
  */
 public class JettyServer {
 	

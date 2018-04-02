@@ -2,6 +2,7 @@ package jmind.hyena.example.server;
 
 import jmind.hyena.bootstrap.HyenaServer;
 import jmind.hyena.container.web.jetty.JettyServer;
+import jmind.hyena.container.web.netty.NettyHttpServer;
 import jmind.hyena.util.HyenaUtil;
 
 /**
@@ -11,7 +12,8 @@ public class TestServer {
 
     public static void main(String[] args) {
         // HyenaConst.multithreading=true;
+
         new HyenaServer().run(9527);
-        JettyServer.start(8088);
+
     }
 }

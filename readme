@@ -13,3 +13,6 @@ hyena(鬣狗) 是一个基于netty的rpc服务框架。采用redis的协议。 �
 4、
 可以自定义Daemon 在服务启动和关闭时调用一些服务
 
+http://blog.csdn.net/dc_726/article/details/46565257
+
+https://my.oschina.net/OutOfMemory/blog/738865

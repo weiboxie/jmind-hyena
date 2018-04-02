@@ -4,4 +4,8 @@ target/
 .classpath
 .idea
 *.iml
+<<<<<<< HEAD
 .DS_Store
+=======
+.DS_Store
+>>>>>>> future/netty4

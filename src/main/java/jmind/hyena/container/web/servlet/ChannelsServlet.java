@@ -1,11 +1,12 @@
 package jmind.hyena.container.web.servlet;
 
+import io.netty.channel.Channel;
 import jmind.hyena.bootstrap.HyenaServer;
 import jmind.hyena.container.web.VelocityFacade;
 import jmind.hyena.frame.StatMonitor;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.velocity.VelocityContext;
-import org.jboss.netty.channel.Channel;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,13 +38,13 @@ public class ChannelsServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         VelocityContext ctx = new VelocityContext();
         List<Map<String,Object>> list=new ArrayList<>();
-        for(Channel channel:HyenaServer.allChannels){
-            SocketAddress client = channel.getRemoteAddress();
+        for(Channel channel:HyenaServer.allChannels.values()){
+            SocketAddress client = channel.remoteAddress();
             if(client!=null){
                 Map<String,Object> map=new HashMap();
-                map.put("isConnected",channel.isConnected());
+                map.put("isConnected",channel.isActive());
                 map.put("client",client);
-                map.put("id",channel.getId());
+                map.put("id",channel.id());
                 list.add(map);
             }
 

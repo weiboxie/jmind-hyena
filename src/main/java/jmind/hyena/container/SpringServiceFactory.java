@@ -6,8 +6,8 @@ import jmind.hyena.server.Service;
 import jmind.hyena.server.ServiceFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 基于spring ClassPathXmlApplicationContext 加载配置的实现
@@ -23,8 +23,10 @@ public class SpringServiceFactory implements ServiceFactory{
     }
 
     @Override
-    public Collection<Filter> getFilters(String name) {
-        return context.getBeansOfType(Filter.class).values();
+    public List<Filter> getFilters(String name) {
+        Map<String, Filter> beansOfType = context.getBeansOfType(Filter.class);
+        // return  new ArrayList<>(beansOfType.values());
+        return  beansOfType.values().stream().collect(Collectors.toList());
     }
 
     @Override

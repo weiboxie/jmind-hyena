@@ -2,7 +2,6 @@ package jmind.hyena.server;
 
 import jmind.hyena.frame.HyenaMsg;
 import jmind.hyena.handler.HyenaCommand;
-import org.jboss.netty.channel.Channel;
 
 /**
  * Created by xieweibo on 2016/11/28.
