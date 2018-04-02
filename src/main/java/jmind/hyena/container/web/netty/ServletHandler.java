@@ -6,9 +6,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
-import jmind.hyena.container.web.netty.servlet.HttpRequest;
-import jmind.hyena.container.web.netty.servlet.HttpResponse;
-import jmind.hyena.container.web.netty.servlet.ServletHelper;
+import jmind.hyena.container.web.netty.http.HttpRequest;
+import jmind.hyena.container.web.netty.http.HttpResponse;
+import jmind.hyena.container.web.netty.http.ServletHelper;
 
 import javax.servlet.Servlet;
 import java.util.Map;

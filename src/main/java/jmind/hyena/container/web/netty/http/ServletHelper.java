@@ -1,4 +1,4 @@
-package jmind.hyena.container.web.netty.servlet;
+package jmind.hyena.container.web.netty.http;
 
 import jmind.hyena.container.web.servlet.ChannelsServlet;
 import jmind.hyena.container.web.servlet.ManageServlet;

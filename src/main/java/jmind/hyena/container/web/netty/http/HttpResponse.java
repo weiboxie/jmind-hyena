@@ -1,4 +1,4 @@
-package jmind.hyena.container.web.netty.servlet;
+package jmind.hyena.container.web.netty.http;
 
 
 import javax.servlet.ServletOutputStream;

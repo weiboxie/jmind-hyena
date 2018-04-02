@@ -1,4 +1,4 @@
-package jmind.hyena.container.web.netty.servlet;
+package jmind.hyena.container.web.netty.http;
 
 
 import io.netty.handler.codec.http.*;
@@ -16,9 +16,7 @@ import java.net.InetAddress;
 import java.security.Principal;
 import java.util.*;
 
-/**
- *
- */
+
 public class HttpRequest implements HttpServletRequest {
 
     private io.netty.handler.codec.http.HttpRequest request;
