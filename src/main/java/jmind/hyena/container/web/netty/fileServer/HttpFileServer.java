@@ -34,7 +34,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
  */
 public class HttpFileServer {
 
-    private static final String DEFAULT_URL = "/Users/weibo/workspace/learn";
+    private static final String DEFAULT_URL = "/DOC";
 
     public void run(final int port, final String url) throws Exception {
 	EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -70,7 +70,7 @@ public class HttpFileServer {
     }
 
     public static void main(String[] args) throws Exception {
-	int port = 8080;
+	int port = 80;
 	if (args.length > 0) {
 	    try {
 		port = Integer.parseInt(args[0]);

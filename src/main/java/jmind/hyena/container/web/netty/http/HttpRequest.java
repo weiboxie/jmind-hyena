@@ -90,7 +90,7 @@ public class HttpRequest implements HttpServletRequest {
             contentType = "application/x-www-form-urlencoded";
         }
         postData = request.content().toString();
-        parameters.putAll(RequestUtil.getParameterMap(postData));
+        parameters.putAll(RequestUtil.getParamterMap(postData));
     }
 
 
